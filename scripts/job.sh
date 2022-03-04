@@ -12,18 +12,20 @@ outDir="$2"
 cancerType="$3"
 
 
-nextflow run nf-core/sarek -r 2.7.1 --tools Manta,MSIsensor,Strelka,Mutect2,VEP,snpEff --save_bam_mapped true --outdir "$outDir" --input "$InputFile" --genome GRCh38 -profile singularity --step mapping --trim_fastq true
+#nextflow run nf-core/sarek -r 2.7.1 --tools Manta,MSIsensor,Strelka,Mutect2,VEP,snpEff --save_bam_mapped true --outdir "$outDir" --input "$InputFile" --genome GRCh38 -profile singularity --step mapping --trim_fastq true
 
 mkdir ./${outDir}/excelFiles
 
 
-Path=${outDir}'/Annotation/'$( ls ./${outDir}/Annotation/ | grep '.*_vs_.*' )'/VEP/'
+Path=${outDir}'/Annotation/'$( ls ./${outDir}/Annotation/ | grep '.*_vs_.*' )'/VEP'
 
 projectName=$( ls ./${outDir}/Annotation/ | grep '.*_vs_.*' )
+
+module load R/4.1.0-foss-2021a
 
 Rscript ./scripts/Mutect2ProcessAnnVcfFiles2.0.R "$outDir" "$projectName" "$cancerType"
 Rscript ./scripts/StrelkaSNVsProcessAnnVcfFiles2.0.R "$outDir" "$projectName" "$cancerType"
 Rscript ./scripts/StrelkaIndelProcessAnnVcfFiles2.0.R "$outDir" "$projectName" "$cancerType"
 
 #copy xlsx files to excelfile location
-cp ${Path}/*.xlsx ./${outDir}/exelFiles/
+cp ${Path}/*.xlsx ./${outDir}/excelFiles/

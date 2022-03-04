@@ -12,11 +12,11 @@
 
 args = commandArgs(trailingOnly = TRUE)
 
-#project=args[1]
+
 project <- args[1]
 projectName <- args[2]
 cancerType <- args[3]
-#projectName=args[2]
+libPath <- "Rlibrary"
 
 #Path <- paste0("./results/sarek/",project,"/Annotation/",projectName,"/VEP/")
 
@@ -39,7 +39,7 @@ DriverDBv3 <- read.table('./Data/mutation_download_tab.txt', sep = "\t", header 
 
 
 
-library(vcfR) #, lib.loc = libPath)
+library(vcfR, lib.loc = libPath)
 data <- read.vcfR(paste0(Path,InputFile))
 
 
@@ -48,14 +48,14 @@ vcf <- data.frame(data@fix)
 vcf_gt <- data.frame(data@gt)
 
 # get tumor sample name in vcf
-library(stringr)# , lib.loc = libPath)
+library(stringr, lib.loc = libPath)
 tumorColumnNameInVcf = data.frame(str_extract(meta_info, '^##tumor_sample=.*'))
 tumorColumnNameInVcf <- tumorColumnNameInVcf[!is.na(tumorColumnNameInVcf)]
 tumorColumnNameInVcf <- paste0("X",str_replace(tumorColumnNameInVcf , '^##tumor_sample=' , ''))
 tumorColumnNameInVcf <- str_replace_all(tumorColumnNameInVcf , '-', '.')
 
 # get normal sample name in vcf
-library(stringr)# , lib.loc = libPath)
+library(stringr , lib.loc = libPath)
 normalColumnNameInVcf = data.frame(str_extract(meta_info, '^##normal_sample=.*'))
 normalColumnNameInVcf <- normalColumnNameInVcf[!is.na(normalColumnNameInVcf)]
 normalColumnNameInVcf <- paste0("X",str_replace(normalColumnNameInVcf , '^##normal_sample=' , ''))
@@ -99,7 +99,7 @@ header_names <- unlist(strsplit(InfoHeader2, split = "|", fixed=TRUE)) # split h
 
 
 # create data frame where all data is collected together 
-library(dplyr )#, lib.loc = libPath)
+library(dplyr, lib.loc = libPath)
 totalNbrColumns <- (length(names(Df_1)) + length(header_names))
 allColNames <- c(names(Df_1) , header_names)
 
@@ -273,7 +273,7 @@ selectedColumnsPASSinDB <- selectedColumnsPASS[((selectedColumnsPASS$CGC_locatio
 ################################################################################
 #write xlsx files
 #library(xlsx)
-library(openxlsx )#, lib.loc = libPath)
+library(openxlsx, lib.loc = libPath)
 
 print("save output file")
 
