@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-#SBATCH --time=24:00:00
+#SBATCH --time=28:00:00
 #SBATCH --mem=128000
-#SBATCH --job-name=BLCa128
 #SBATCH --cpus-per-task=16
 
 module load Workspace_Home;
@@ -12,7 +11,7 @@ outDir="$2"
 cancerType="$3"
 
 
-#nextflow run nf-core/sarek -r 2.7.1 --tools Manta,MSIsensor,Strelka,Mutect2,VEP,snpEff --save_bam_mapped true --outdir "$outDir" --input "$InputFile" --genome GRCh38 -profile singularity --step mapping --trim_fastq true
+nextflow run nf-core/sarek -r 2.7.1 --tools Manta,MSIsensor,Strelka,Mutect2,VEP,snpEff --save_bam_mapped true --outdir "$outDir" --input "$InputFile" --genome GRCh38 -profile singularity --step mapping --trim_fastq true
 
 mkdir ./${outDir}/excelFiles
 
